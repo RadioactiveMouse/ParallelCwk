@@ -4,6 +4,7 @@
 # Libraries
 *.lib
 *.a
+*.hi
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -14,4 +15,13 @@
 # Executables
 *.exe
 *.out
-*.app
+*.api
+
+*.eventlog
+
+# Compiled using make
+seq
+mpi
+haskell
+gph
+openmp
