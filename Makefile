@@ -10,3 +10,6 @@ gph:
 
 haskell:
 	ghc -O2 -o haskell htotientrange.hs
+
+openmp:
+	gcc -fopenmp omptotientrange.c -o openmp
