@@ -1,19 +1,15 @@
-// mpitotientrange.c - Parallel Euler Totient Function (C Version)
+// mpitotientrange.c - Sequential Euler Totient Function (C Version)
 // compile: make mpi
 // run:     ./TotientRange lower_num uppper_num
 
 // Greg Michaelson 14/10/2003
 // Patrick Maier   29/01/2010 [enforced ANSI C compliance]
-// Tom Townsend
 
 // This program calculates the sum of the totients between a lower and an 
 // upper limit using C longs. It is based on earlier work by:
 // Phil Trinder, Nathan Charles, Hans-Wolfgang Loidl and Colin Runciman
 
 #include <stdio.h>
-#include <unistd.h>
-#include <mpi.h>
-
 
 // hcf x 0 = x
 // hcf x y = hcf y (rem x y)
@@ -69,10 +65,6 @@ long sumTotient(long lower, long upper)
 int main(int argc, char ** argv)
 {
   long lower, upper;
-  MPI_init(&argc,&argv); // start VM
-  MPI_Comm_size(MPI_COMM_WORLD, &p); // get size of VM
-  MPI_Comm_rank(MPI_COMM_WORLD, &id); // get own rank in VM
-
 
   if (argc != 3) {
     printf("not 2 arguments\n");
