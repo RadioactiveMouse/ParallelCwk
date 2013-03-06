@@ -27,17 +27,17 @@ import Control.Parallel.Strategies
 sumTotient :: Int -> Int -> Int
 --sumTotient lower upper = sum (map euler [lower, lower+1 .. upper])
 
-sumTotient lower upper | upper-lower<=5 = sum(map euler[lower,lower+1 .. upper])
-		       | otherwise 	= st1+st2 `using` strat
-					where mid = (upper+lower) `div` 2
-				      	      st1 = sumTotient lower mid
-				              st2 = sumTotient mid+1 upper
-				              strat result = do
-						rpar st1
-						rseq st2
-						return result
+--sumTotient lower upper | upper-lower<=100 = sum(map euler[lower,lower+1 .. upper])
+--		       | otherwise 	= st1+st2 `using` strat
+--					where mid = (upper+lower) `div` 2
+--				      	      st1 = sumTotient lower mid
+--				              st2 = sumTotient (mid+1) upper
+--				              strat result = do
+--								rpar st1
+--								rseq st2
+--								return result
 				
-
+sumTotient lower upper = sum(map euler [lower,lower+1 .. upper] `using` parListChunk 100 rdeepseq)
 ---------------------------------------------------------------------------
 -- euler
 ---------------------------------------------------------------------------
