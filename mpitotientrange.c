@@ -63,21 +63,8 @@ long sumTotient(long lower, long upper)
     sum = sum + euler(i);
   return sum;
 }
-/*
-void worker() {
-	
-	MPI_Status lstatus, hstatus;
-	long lower, upper,totient;
 
-	// receive the lower and upper bound we need to compute
-	// TODO : make this into a single receive if possible to remove some communication overhead
-	MPI_Recv(&lower,2,MPI_LONG,1,0,MPI_COMM_WORLD,&lstatus); // store, count, type, source, tag, comm, status
-	// MPI_Recv(&upper,2,MPI_LONG,1,0,MPI_COMM_WORLD,&hstatus);
-	&totient = sumTotient(lower,higher);
-	// send the answer back to the coordinator thread
-	MPI_Send(&totient,1,MPI_LONG,1,0,MPI_COMM_WORLD); // answer, count, type, destination, tag, comm
-}
-*/
+
 int main(int argc, char ** argv)
 {
 	int p,id,i;
@@ -101,10 +88,8 @@ int main(int argc, char ** argv)
 		// coordinator
 		// bin the input to compute
 		// bounds should be lower,upper,lower,upper
-		printf("Number of bins : %i\n",p);
 		bounds = (long*) malloc(p*2*sizeof(long));
 		binsize = (upper-lower)/p;
-		printf("Binsize : %ld\n",binsize);
 		// determine the bin sizes to be handed off to the different workers	
 		for(i=0;i<p*2;i++){
 			// check to make sure it's the lower bound or not?
@@ -119,7 +104,6 @@ int main(int argc, char ** argv)
 		int last = p*2-1;
 		if(bounds[last] != upper)
 			bounds[last] = upper;
-		printf("Last = %i\n",last);
 	}
 	// send the data to a worker threads
 	MPI_Scatter(bounds,2,MPI_LONG,item,2,MPI_LONG,0,MPI_COMM_WORLD);
