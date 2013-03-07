@@ -15,6 +15,7 @@ import System.Environment
 import System.IO
 import Control.Parallel
 import Control.Parallel.Strategies
+import GHC.Conc (numCapabilities)
 
 ---------------------------------------------------------------------------
 -- Main Function, sumTotient
@@ -24,9 +25,8 @@ import Control.Parallel.Strategies
 -- 2. Applies Euler's phi function to every element of the list
 -- 3. Returns the sum of the results
 
-sumTotient :: Int -> Int -> Int
+sumTotient :: Int -> Int -> Int -> Int
 --sumTotient lower upper = sum (map euler [lower, lower+1 .. upper])
-
 --sumTotient lower upper | upper-lower<=100 = sum(map euler[lower,lower+1 .. upper])
 --		       | otherwise 	= st1+st2 `using` strat
 --					where mid = (upper+lower) `div` 2
@@ -36,8 +36,8 @@ sumTotient :: Int -> Int -> Int
 --								rpar st1
 --								rseq st2
 --								return result
-				
-sumTotient lower upper = sum(map euler [lower,lower+1 .. upper] `using` parListChunk 100 rdeepseq)
+
+sumTotient lower upper chunk = sum(map euler [lower,lower+1 .. upper] `using` parListChunk chunk rdeepseq)
 ---------------------------------------------------------------------------
 -- euler
 ---------------------------------------------------------------------------
@@ -82,18 +82,9 @@ main = do args <- getArgs
           let 
             lower = read (args!!0) :: Int -- lower limit of the interval
             upper = read (args!!1) :: Int -- upper limit of the interval
+            chunk = (upper-lower) `div` (numCapabilities*10)
           hPutStrLn stderr ("Sum of Totients between [" ++ 
                       (show lower) ++ ".." ++ (show upper) ++ "] is " ++ 
-                       show (sumTotient lower upper))
-
-
-
-
-
-
-
-
-
-
+                       show (sumTotient lower upper chunk))
 
 
