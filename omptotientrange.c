@@ -58,13 +58,11 @@ long euler(long n)
 long sumTotient(long lower, long upper)
 {
 	long sum, i;
-	int chunk;
 
 	sum = 0;
-	#pragma omp parallel shared(upper, lower, sum, chunk) private(i)
+	#pragma omp parallel shared(upper, lower, sum) private(i)
 	{
-		chunk = (upper-lower)/(omp_get_num_threads()*10);
-		#pragma omp for schedule(dynamic, chunk)
+		#pragma omp for reduction(+:sum)
 			for (i = lower; i <= upper; i++)
 				sum = sum + euler(i);
 	}
